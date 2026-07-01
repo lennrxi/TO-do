@@ -1311,7 +1311,7 @@ function renderNutrition(ds) {
           <div class="meal-macros">P ${m.prot||0}g · K ${m.carb||0}g · F ${m.fat||0}g</div>
         </div>
         <span class="meal-kcal">${m.kcal||0} kcal</span>
-        <button class="meal-fav ${favd?'active':''}" onclick="toggleFav(${JSON.stringify(JSON.stringify(m))})" title="${favd?'Aus Favoriten entfernen':'Als Favorit speichern'}">${favd?'★':'☆'}</button>
+        <button class="meal-fav ${favd?'active':''}" onclick="toggleFav('${ds}',${i})" title="${favd?'Aus Favoriten entfernen':'Als Favorit speichern'}">${favd?'★':'☆'}</button>
         <button class="meal-del" onclick="delMeal('${ds}',${i})">✕</button>
       </div>`;
     }).join('') + '</div>';
@@ -1365,14 +1365,15 @@ document.getElementById('mName').addEventListener('keydown', e => {
 let favs = JSON.parse(localStorage.getItem('dalys2_favs') || '[]');
 const saveFavs = () => localStorage.setItem('dalys2_favs', JSON.stringify(favs));
 
-function favKey(m) { return m.name + '|' + m.kcal; }
+function favKey(m) { return (m.name||'').trim() + '|' + (m.kcal||0); }
 function isFav(m) { return favs.some(f => favKey(f) === favKey(m)); }
 
-function toggleFav(mJson) {
-  const m = JSON.parse(mJson);
+function toggleFav(ds, idx) {
+  const m = (meals[ds] || [])[idx];
+  if (!m) return;
   const k = favKey(m);
-  const idx = favs.findIndex(f => favKey(f) === k);
-  if (idx >= 0) favs.splice(idx, 1);
+  const fi = favs.findIndex(f => favKey(f) === k);
+  if (fi >= 0) favs.splice(fi, 1);
   else favs.push({ name: m.name, kcal: m.kcal, prot: m.prot, carb: m.carb, fat: m.fat });
   saveFavs();
   render();
@@ -1651,12 +1652,18 @@ function celebrate() {
 // ─── SERVICE WORKER (Offline + PWA) ──────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   const sw = `
-    const V = 'dalys-v2';
-    self.addEventListener('install', e =>
-      e.waitUntil(caches.open(V).then(c => c.addAll([self.location.pathname])))
-    );
+    const V = 'dalys-v4';
+    self.addEventListener('install', e => {
+      self.skipWaiting();
+      e.waitUntil(caches.open(V).then(c => c.addAll([self.location.pathname])));
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(keys =>
+        Promise.all(keys.filter(k => k !== V).map(k => caches.delete(k)))
+      ).then(() => self.clients.claim()));
+    });
     self.addEventListener('fetch', e =>
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)))
+      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)))
     );
   `;
   const blob = new Blob([sw], {type:'application/javascript'});
