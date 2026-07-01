@@ -69,7 +69,7 @@ header {
 
 /* ── QUICK ACTIONS ───────────────────────────────────────────── */
 .quick-strip {
-  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
   gap: 8px; padding: 14px 20px;
   border-bottom: 1px solid var(--border);
 }
@@ -460,6 +460,22 @@ input[type=color] {
 .mc-carb  { background: #81c784; }
 .mc-fat   { background: #ffb74d; }
 
+/* ── CELEBRATION ─────────────────────────────────────────────── */
+#celebrationCanvas {
+  position: fixed; inset: 0; z-index: 999;
+  pointer-events: none;
+}
+.celebrate-msg {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 1000; text-align: center;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.celebrate-msg.show { transform: translate(-50%, -50%) scale(1); }
+.celebrate-msg .big { font-size: 3.5rem; display: block; margin-bottom: 8px; }
+.celebrate-msg .txt { font-size: 1rem; font-weight: 700; color: #fff; }
+
 /* ── SCANNER ─────────────────────────────────────────────────── */
 .scan-overlay {
   position: fixed; inset: 0; z-index: 500;
@@ -611,13 +627,17 @@ input[type=number]:focus { border-color: #444; }
     </div>
     <div class="frow">
       <div class="fg">
-        <label class="fl">Uhrzeit</label>
-        <input type="time" id="iTime" />
+        <label class="fl">Von</label>
+        <input type="time" id="iTimeFrom" />
       </div>
       <div class="fg">
-        <label class="fl">Datum</label>
-        <input type="date" id="iDate" />
+        <label class="fl">Bis</label>
+        <input type="time" id="iTimeTo" />
       </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Datum</label>
+      <input type="date" id="iDate" />
     </div>
     <div class="fg">
       <label class="fl">Kategorie &nbsp;<span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0" onclick="openCats()" style="cursor:pointer">— Verwalten</span></label>
@@ -646,6 +666,12 @@ input[type=number]:focus { border-color: #444; }
       <button class="btn-save" onclick="saveTask()">Speichern</button>
     </div>
   </div>
+</div>
+
+<canvas id="celebrationCanvas"></canvas>
+<div class="celebrate-msg" id="celebrateMsg">
+  <span class="big">🎉</span>
+  <span class="txt">Alles erledigt!</span>
 </div>
 
 <!-- SCAN OVERLAY -->
@@ -820,7 +846,7 @@ function isDone(t, ds) {
 function tasksFor(ds) {
   return tasks
     .filter(t => taskOnDate(t, ds))
-    .sort((a,b) => (a.time||'99:99').localeCompare(b.time||'99:99'));
+    .sort((a,b) => (a.timeFrom||'99:99').localeCompare(b.timeFrom||'99:99'));
 }
 
 function nowHHMM() { return new Date().toTimeString().slice(0,5); }
@@ -841,8 +867,10 @@ setInterval(updateHeaderDate, 60000);
 // ─── QUICK STRIP ─────────────────────────────────────────────────────────────
 const QUICKS = [
   { id:'sk_am', icon:'☀️', label:'Skincare' },
-  { id:'sk_pm', icon:'🌙', label:'Skincare' },
+  { id:'te_am', icon:'🦷', label:'Teeth' },
   { id:'bt_am', icon:'☀️', label:'Pray' },
+  { id:'sk_pm', icon:'🌙', label:'Skincare' },
+  { id:'te_pm', icon:'🦷', label:'Teeth' },
   { id:'bt_pm', icon:'🌙', label:'Pray' },
 ];
 
@@ -873,6 +901,7 @@ function setView(v, el) {
 }
 
 // ─── PROGRESS ────────────────────────────────────────────────────────────────
+let lastAllDone = false;
 function renderProgress() {
   const all = tasksFor(todayStr());
   const done = all.filter(t => isDone(t, todayStr())).length;
@@ -881,6 +910,10 @@ function renderProgress() {
   document.getElementById('pLbl').textContent = `${done} von ${total} heute erledigt`;
   document.getElementById('pPct').textContent = pct + '%';
   document.getElementById('pFill').style.width = pct + '%';
+
+  const allDone = total > 0 && done === total;
+  if (allDone && !lastAllDone) celebrate();
+  lastAllDone = allDone;
 }
 
 // ─── MAIN RENDER ─────────────────────────────────────────────────────────────
@@ -907,17 +940,20 @@ function taskCard(t, ds) {
   const done = isDone(t, ds);
   const cat = cats.find(c => c.id === t.catId);
   const now = nowHHMM();
-  const overdue = t.time && t.time < now && !done;
+  const overdue = t.timeFrom && t.timeFrom < now && !done;
   const recurLabel = t.repeatDays && t.repeatDays.length
     ? '↺ ' + t.repeatDays.map(d => DAYS[d]).join(' ')
     : '';
+  const timeLabel = t.timeFrom && t.timeTo
+    ? `${t.timeFrom} – ${t.timeTo} Uhr`
+    : t.timeFrom ? `${t.timeFrom} Uhr` : '';
 
   return `<div class="task-card ${done?'done':''}">
     <div class="cb ${done?'checked':''}" onclick="toggleTask('${t.id}','${ds}')"></div>
     <div class="task-body">
       <div class="task-title">${esc(t.title)}</div>
       <div class="task-meta">
-        ${t.time ? `<span class="task-time">${t.time} Uhr</span>` : ''}
+        ${timeLabel ? `<span class="task-time">${timeLabel}</span>` : ''}
         ${cat ? `<span class="task-cat" style="background:${cat.color}18;color:${cat.color};border:1px solid ${cat.color}35">${esc(cat.name)}</span>` : ''}
         ${recurLabel ? `<span class="task-recur">${esc(recurLabel)}</span>` : ''}
         ${overdue ? `<span class="task-overdue">Überfällig</span>` : ''}
@@ -1055,7 +1091,8 @@ function openTask(id = null) {
   editId = id;
   document.getElementById('taskSheetTitle').textContent = t ? 'Bearbeiten' : 'Neue Aufgabe';
   document.getElementById('iTitle').value = t ? t.title : '';
-  document.getElementById('iTime').value = t ? (t.time || '') : '';
+  document.getElementById('iTimeFrom').value = t ? (t.timeFrom || '') : '';
+  document.getElementById('iTimeTo').value = t ? (t.timeTo || '') : '';
   document.getElementById('iDate').value = t ? (t.date || selDate) : selDate;
   selCatId = t ? (t.catId || null) : null;
   selDays = t ? (t.repeatDays ? [...t.repeatDays] : []) : [];
@@ -1100,13 +1137,14 @@ function saveTask() {
   const title = document.getElementById('iTitle').value.trim();
   if (!title) { document.getElementById('iTitle').focus(); return; }
 
-  const time   = document.getElementById('iTime').value;
-  const date   = document.getElementById('iDate').value || selDate;
-  const notify = document.getElementById('notifToggle').classList.contains('on');
+  const timeFrom = document.getElementById('iTimeFrom').value;
+  const timeTo   = document.getElementById('iTimeTo').value;
+  const date     = document.getElementById('iDate').value || selDate;
+  const notify   = document.getElementById('notifToggle').classList.contains('on');
 
   const data = {
     id: editId || uid(),
-    title, time, date,
+    title, timeFrom, timeTo, date,
     catId: selCatId,
     repeatDays: [...selDays],
     notify,
@@ -1124,7 +1162,7 @@ function saveTask() {
   }
 
   save();
-  if (notify && time && date) scheduleNotif(title, time, date);
+  if (notify && timeFrom && date) scheduleNotif(title, timeFrom, date);
   closeSheet('taskSheet');
   render();
 }
@@ -1494,6 +1532,56 @@ function checkNotifBanner() {
   if ('Notification' in window && Notification.permission === 'default') {
     document.getElementById('notifBar').style.display = 'block';
   }
+}
+
+// ─── CELEBRATION ──────────────────────────────────────────────────────────────
+function celebrate() {
+  const msg = document.getElementById('celebrateMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2800);
+
+  const canvas = document.getElementById('celebrationCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const pieces = [];
+  const colors = ['#fff','#aaa','#666','#ddd','#f0f0f0','#ffffff'];
+
+  for (let i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -10 - Math.random() * 200,
+      w: 6 + Math.random() * 8,
+      h: 4 + Math.random() * 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 4,
+      vr: (Math.random() - 0.5) * 0.2,
+      opacity: 1,
+    });
+  }
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      p.vy += 0.05;
+      if (frame > 80) p.opacity -= 0.015;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 130) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
 }
 
 // ─── SERVICE WORKER (Offline + PWA) ──────────────────────────────────────────
