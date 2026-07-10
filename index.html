@@ -62,3 +62,1462 @@
     max-width:480px;
     margin:0 auto;
     padding:calc(20px + env(safe-area-inset-top)) 16px 100px;
+  }
+
+  /* ---------- Header ---------- */
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:22px;
+  }
+  .brand{
+    font-weight:800;
+    font-size:22px;
+    letter-spacing:0.14em;
+    transform:scaleX(0.94);
+    transform-origin:left;
+  }
+  .brand-sub{
+    font-size:11px;
+    color:var(--text-dimmer);
+    letter-spacing:0.08em;
+    margin-top:2px;
+  }
+
+  .date-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:10px 8px;
+    margin-bottom:26px;
+  }
+  .date-bar button{
+    background:var(--surface-2);
+    border:none;
+    color:var(--text);
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .date-bar button:hover{ background:#2b3143; }
+  .date-bar button:active{ transform:scale(0.9); }
+  .date-center{
+    text-align:center;
+    flex:1;
+  }
+  .date-main{
+    font-size:14.5px;
+    font-weight:600;
+    text-transform:capitalize;
+  }
+  .date-today-link{
+    font-size:10.5px;
+    color:var(--text-dimmer);
+    margin-top:2px;
+    cursor:pointer;
+    letter-spacing:0.04em;
+  }
+  .date-today-link:hover{ color:var(--text-dim); }
+
+  .day-summary{
+    font-size:11px;
+    color:var(--text-dim);
+    text-align:center;
+    padding:1px 10px;
+    margin-bottom:14px;
+    min-height:15px;
+    line-height:1.5;
+    letter-spacing:0.01em;
+  }
+  .day-summary .sep{ color:var(--text-dimmer); margin:0 6px; }
+
+  /* ---------- Pages ---------- */
+  .page{ display:none; }
+  .page.active{ display:block; animation:fadeIn .25s ease; }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(4px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ---------- Section header ---------- */
+  .section{ margin-bottom:30px; }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:12px;
+    padding:0 2px;
+  }
+  .section-title{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:0.16em;
+    transform:scaleX(0.94);
+    transform-origin:left;
+    color:var(--text);
+  }
+  .section-progress{
+    font-family:"SF Mono","Roboto Mono",ui-monospace,Menlo,Consolas,monospace;
+    font-size:12px;
+    color:var(--text-dimmer);
+  }
+
+  /* ---------- Supplement cards ---------- */
+  .supp-card{
+    --accent:#ffffff;
+    --accent-rgb:255,255,255;
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:12px 14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    user-select:none;
+    overflow:hidden;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .supp-card:active{ transform:scale(0.99); }
+  .supp-card.taken{
+    border-color:rgba(var(--accent-rgb),0.5);
+    background:linear-gradient(180deg, rgba(var(--accent-rgb),0.10), var(--surface) 70%);
+  }
+  .supp-icon-wrap{
+    width:56px;
+    min-width:56px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    flex-wrap:wrap;
+    position:relative;
+  }
+  .supp-info{ flex:1; min-width:0; }
+  .supp-name{ font-size:14.5px; font-weight:600; }
+  .supp-dose{ font-size:12px; color:var(--text-dim); margin-top:1px; }
+
+  .check-badge{
+    width:26px;
+    height:26px;
+    min-width:26px;
+    border-radius:50%;
+    border:1.5px solid var(--text-dimmer);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .supp-card.taken .check-badge{
+    border-color:var(--accent);
+    background:var(--accent);
+  }
+  .check-badge svg{
+    width:14px; height:14px;
+    opacity:0;
+    transform:scale(0.4);
+  }
+  .supp-card.taken .check-badge svg{ opacity:1; }
+  .supp-card.just-taken .check-badge svg{
+    animation:popCheck .45s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  .supp-card.just-taken{
+    animation:ringPulse .7s ease-out;
+  }
+  @keyframes popCheck{
+    0%{ transform:scale(0.3) rotate(-20deg); opacity:0; }
+    60%{ transform:scale(1.25) rotate(4deg); opacity:1; }
+    100%{ transform:scale(1) rotate(0deg); opacity:1; }
+  }
+  @keyframes ringPulse{
+    0%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),0.45); }
+    100%{ box-shadow:0 0 0 16px rgba(var(--accent-rgb),0); }
+  }
+
+  .dust-wrap{
+    position:absolute;
+    top:-4px; left:0; right:0;
+    height:1px;
+    pointer-events:none;
+  }
+  .dust{
+    position:absolute;
+    width:5px; height:5px;
+    border-radius:50%;
+    background:var(--creatine);
+    opacity:0;
+  }
+  .just-taken .dust{
+    animation:dustFloat 0.9s ease-out forwards;
+  }
+  .dust:nth-child(1){ left:8px;  animation-delay:0s; }
+  .dust:nth-child(2){ left:16px; animation-delay:.05s; }
+  .dust:nth-child(3){ left:24px; animation-delay:.1s; }
+  .dust:nth-child(4){ left:20px; animation-delay:.02s; }
+  .dust:nth-child(5){ left:12px; animation-delay:.12s; }
+  .dust:nth-child(6){ left:28px; animation-delay:.08s; }
+  @keyframes dustFloat{
+    0%{ opacity:.9; transform:translate(0,0) scale(1); }
+    100%{ opacity:0; transform:translate(var(--dx,4px),-26px) scale(0.4); }
+  }
+  .dust:nth-child(odd){ --dx:8px; }
+  .dust:nth-child(even){ --dx:-8px; }
+
+  /* ---------- Streak card ---------- */
+  .streak-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px 14px;
+    margin-bottom:14px;
+  }
+  .streak-main{
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .streak-flame{ font-size:15px; }
+  .streak-count{ font-size:16px; font-weight:800; }
+  .streak-label{ font-size:10.5px; color:var(--text-dim); }
+  .streak-week{ display:flex; gap:5px; }
+  .streak-dot{
+    width:19px; height:19px;
+    min-width:19px;
+    border-radius:50%;
+    border:1.5px solid var(--text-dimmer);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:8px;
+    font-weight:700;
+    color:var(--text-dimmer);
+  }
+  .streak-dot.today-marker{ border-color:var(--text); }
+
+  /* ---------- Ritual (Prayer & Skincare) ---------- */
+  .ritual-group{ margin-bottom:20px; }
+  .ritual-group-title{
+    font-size:10.5px;
+    font-weight:800;
+    letter-spacing:0.12em;
+    color:var(--text-dimmer);
+    margin-bottom:9px;
+    padding-left:2px;
+  }
+  .ritual-complete{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--gebet);
+    background:rgba(212,175,106,0.12);
+    border:1px solid rgba(212,175,106,0.35);
+    border-radius:12px;
+    padding:11px;
+    margin-bottom:18px;
+    animation:fadeIn .35s ease;
+  }
+  .ritual-card.taken .supp-icon-wrap{
+    animation:glowFlicker 2.6s ease-in-out infinite;
+  }
+  @keyframes glowFlicker{
+    0%,100%{ filter:drop-shadow(0 0 2px rgba(var(--accent-rgb),0.45)); }
+    50%{ filter:drop-shadow(0 0 7px rgba(var(--accent-rgb),0.9)); }
+  }
+
+  /* ---------- Sports (Gym) cards ---------- */
+  .week-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:14px;
+    margin-bottom:14px;
+  }
+  .week-card-title{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+    margin-bottom:10px;
+  }
+  .week-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+    font-size:11px;
+    color:var(--text-dim);
+  }
+  .week-legend span{ display:inline-flex; align-items:center; gap:5px; }
+  .week-legend i{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .week-hint{
+    font-size:10px;
+    color:var(--text-dimmer);
+    text-align:center;
+    margin-top:10px;
+    letter-spacing:0.02em;
+  }
+
+  .month-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .month-nav-btn{
+    background:var(--surface-2);
+    border:none;
+    color:var(--text);
+    width:30px; height:30px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+  }
+  .month-nav-label{
+    font-size:13px;
+    font-weight:600;
+    text-transform:capitalize;
+  }
+
+  .month-grid-wrap{ position:relative; }
+  .month-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:5px;
+  }
+  .month-cell-head{
+    font-size:9px;
+    text-align:center;
+    color:var(--text-dimmer);
+    font-weight:800;
+    padding-bottom:5px;
+    letter-spacing:0.03em;
+  }
+  .month-cell{
+    aspect-ratio:1;
+    border-radius:9px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    cursor:pointer;
+    font-size:10.5px;
+    color:var(--text-dim);
+  }
+  .month-cell.outside{ opacity:0.25; cursor:default; }
+  .month-cell.today{ border-color:var(--text-dim); }
+  .month-cell.current{ border-color:#ffffff; box-shadow:0 0 0 1px #ffffff; }
+  .month-cell.selected{ border-color:var(--text); background:var(--surface); z-index:2; }
+  .month-cell-num{ font-weight:700; }
+  .month-cell-dots{ display:flex; gap:2px; align-items:center; min-height:8px; }
+  .month-dot{ width:6px; height:6px; border-radius:50%; }
+  .month-split-label{
+    font-size:8.5px;
+    font-weight:800;
+    letter-spacing:0.01em;
+    line-height:1;
+  }
+  .month-emoji{ font-size:8px; line-height:1; }
+
+  .split-picker{
+    position:absolute;
+    z-index:30;
+    display:none;
+    width:232px;
+    max-width:calc(100% - 6px);
+    background:var(--surface-2);
+    border:1px solid var(--text-dimmer);
+    border-radius:14px;
+    padding:12px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.45);
+  }
+  .split-picker.visible{ display:block; }
+  .split-picker-label{
+    font-size:11px;
+    color:var(--text-dim);
+    margin-bottom:9px;
+    font-weight:600;
+  }
+  .split-picker-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+  }
+  .split-chip{
+    background:var(--surface);
+    border:1.5px solid var(--border);
+    color:var(--text-dim);
+    border-radius:20px;
+    padding:6px 11px;
+    font-size:11.5px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .split-picker-divider{
+    width:100%;
+    height:1px;
+    background:var(--border);
+    margin:2px 0 5px;
+  }
+  .split-chip-toggle{
+    border-style:dashed;
+  }
+
+  .app-links{
+    display:flex;
+    gap:10px;
+  }
+  .app-link{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    background:none;
+    border:1px dashed var(--border);
+    color:var(--text-dim);
+    border-radius:10px;
+    padding:11px 8px;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.02em;
+    text-decoration:none;
+    text-align:center;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .app-link:hover{ color:var(--text); border-color:var(--text-dimmer); }
+
+  /* ---------- Bottom nav ---------- */
+  .bottom-nav{
+    position:fixed;
+    bottom:0; left:0; right:0;
+    display:flex;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    z-index:50;
+  }
+  .nav-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    background:none;
+    border:none;
+    color:var(--text-dimmer);
+    padding:6px 4px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:10.5px;
+    letter-spacing:0.02em;
+    transition:color .15s ease, background .15s ease;
+  }
+  .nav-btn .nav-icon{ width:22px; height:22px; }
+  .nav-btn.active{ background:var(--surface-2); }
+  .nav-btn[data-page="supplements"].active{ color:var(--allinone); }
+  .nav-btn[data-page="gym"].active{ color:var(--gym); }
+  .nav-btn[data-page="ritual"].active{ color:var(--gebet); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="header">
+      <div>
+        <div class="brand">PROTOCOL</div>
+        <div class="brand-sub">SUPPLEMENTS · SPORTS</div>
+      </div>
+    </div>
+
+    <div class="date-bar">
+      <button id="prevDay" aria-label="Previous day">‹</button>
+      <div class="date-center">
+        <div class="date-main" id="dateMain">–</div>
+        <div class="date-today-link" id="gotoToday">TODAY</div>
+      </div>
+      <button id="nextDay" aria-label="Next day">›</button>
+    </div>
+
+    <!-- ===== PAGE: SUPPLEMENTS ===== -->
+    <div class="page" id="page-supplements">
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">SUPPLEMENTS</div>
+          <div class="section-progress" id="suppProgress">0/5</div>
+        </div>
+
+        <div class="streak-card">
+          <div class="streak-main">
+            <span class="streak-flame">🔥</span>
+            <span class="streak-count" id="suppStreakCount">0</span>
+            <span class="streak-label">day streak</span>
+          </div>
+          <div class="streak-week" id="suppStreakWeek"></div>
+        </div>
+
+        <div id="suppList"></div>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: SPORTS ===== -->
+    <div class="page" id="page-gym">
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">SPORTS</div>
+        </div>
+
+        <div class="day-summary" id="daySummary">–</div>
+
+        <div class="week-card">
+          <div class="month-nav">
+            <button type="button" class="month-nav-btn" data-dir="-1">‹</button>
+            <div class="month-nav-label" id="gymMonthLabel">–</div>
+            <button type="button" class="month-nav-btn" data-dir="1">›</button>
+          </div>
+
+          <div class="month-grid-wrap" id="gymMonthWrap">
+            <div class="month-grid" id="gymMonthGrid"></div>
+
+            <div class="split-picker" id="gymSplitPicker">
+              <div class="split-picker-label" id="gymSplitPickerLabel"></div>
+              <div class="split-picker-chips" id="gymSplitPickerChips"></div>
+            </div>
+          </div>
+
+          <div class="week-hint">Tap a day to set split, abs, football &amp; match</div>
+        </div>
+
+        <div class="week-card">
+          <div class="week-card-title">LEGEND</div>
+          <div class="week-legend">
+            <span><i style="background:var(--split-brust)"></i>Chest</span>
+            <span><i style="background:var(--split-ruecken)"></i>Back</span>
+            <span><i style="background:var(--split-arme)"></i>Arms</span>
+            <span><i style="background:var(--split-brust-trizeps)"></i>Chest/Triceps</span>
+            <span><i style="background:var(--split-ruecken-bizeps)"></i>Back/Biceps</span>
+            <span><i style="background:var(--split-schultern)"></i>Shoulders</span>
+            <span><i style="background:var(--split-bauch)"></i>Abs</span>
+            <span>⚽ Football</span>
+            <span>🏟️ Match</span>
+          </div>
+        </div>
+
+        <div class="app-links">
+          <a class="app-link" href="https://www.fussball.de" target="_blank" rel="noopener noreferrer">⚽ fussball.de ↗</a>
+          <a class="app-link" href="https://teampunkt.dfbnet.org/tma/" target="_blank" rel="noopener noreferrer">📋 TeamPunkt ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PAGE: RITUAL ===== -->
+    <div class="page" id="page-ritual">
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">PRAYER &amp; SKINCARE</div>
+          <div class="section-progress" id="ritualProgress">0/8</div>
+        </div>
+
+        <div class="streak-card">
+          <div class="streak-main">
+            <span class="streak-flame">🔥</span>
+            <span class="streak-count" id="ritualStreakCount">0</span>
+            <span class="streak-label">day streak</span>
+          </div>
+          <div class="streak-week" id="ritualStreakWeek"></div>
+        </div>
+
+        <div class="ritual-complete" id="ritualComplete" style="display:none">✨ Ritual complete today</div>
+
+        <div class="ritual-group">
+          <div class="ritual-group-title">MORNING</div>
+          <div id="ritualMorgens"></div>
+        </div>
+
+        <div class="ritual-group">
+          <div class="ritual-group-title">EVENING</div>
+          <div id="ritualAbends"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-btn" data-page="supplements" aria-label="Supplements">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="8" rx="4" stroke="currentColor" stroke-width="1.6"/><line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="1.6"/></svg>
+      <span>Supplements</span>
+    </button>
+    <button class="nav-btn" data-page="gym" aria-label="Sports">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M7 4h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5V4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M7 5.5H4.2a1.8 1.8 0 0 0 1.8 2.7h1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <path d="M17 5.5h2.8a1.8 1.8 0 0 1-1.8 2.7h-1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <line x1="12" y1="13" x2="12" y2="17" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8.5 19.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M8.5 19.5c0-1.6 1.1-2.4 3.5-2.4s3.5.8 3.5 2.4" stroke="currentColor" stroke-width="1.4" fill="none"/>
+      </svg>
+      <span>Sports</span>
+    </button>
+    <button class="nav-btn" data-page="ritual" aria-label="Ritual">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M12 4a8 8 0 0 0 0 16 6 6 0 0 1 0-16z" fill="currentColor" opacity="0.85"/>
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <line x1="19.5" y1="5.5" x2="18.3" y2="6.7"/>
+          <line x1="21.5" y1="12" x2="19.8" y2="12"/>
+          <line x1="19.5" y1="18.5" x2="18.3" y2="17.3"/>
+        </g>
+      </svg>
+      <span>Ritual</span>
+    </button>
+  </nav>
+
+<script>
+(function(){
+  "use strict";
+
+  var SUPPLEMENTS = [
+    { id:'kreatin',   name:'Creatine',   dose:'6 g',        type:'powder', accent:'var(--creatine)' },
+    { id:'curcumin',  name:'Curcumin',   dose:'1 capsule',  type:'pill', count:1, accent:'var(--curcumin)' },
+    { id:'magnesium', name:'Magnesium',  dose:'2 capsules', type:'pill', count:2, accent:'var(--magnesium)' },
+    { id:'zink',      name:'Zinc',       dose:'1 capsule',  type:'pill', count:1, accent:'var(--zink)' },
+    { id:'allinone',  name:'All-in-One', dose:'4 capsules', type:'pill', count:4, accent:'var(--allinone)' }
+  ];
+
+  var ROUTINE = [
+    { id:'gebet_morgens', name:'Morning Prayer', dose:'Morning',  kind:'gebet', period:'morgens', accent:'var(--gebet)' },
+    { id:'water_morgens', name:'Glass of Water', dose:'Morning',  kind:'water', period:'morgens', accent:'var(--water)' },
+    { id:'teeth_morgens', name:'Brush Teeth',    dose:'Morning',  kind:'teeth', period:'morgens', accent:'var(--teeth)' },
+    { id:'haut_morgens',  name:'Skincare',        dose:'Morning', kind:'haut',  period:'morgens', accent:'var(--haut)' },
+    { id:'gebet_abends',  name:'Evening Prayer',  dose:'Evening', kind:'gebet', period:'abends',  accent:'var(--gebet)' },
+    { id:'water_abends',  name:'Glass of Water', dose:'Evening',  kind:'water', period:'abends',  accent:'var(--water)' },
+    { id:'teeth_abends',  name:'Brush Teeth',    dose:'Evening',  kind:'teeth', period:'abends',  accent:'var(--teeth)' },
+    { id:'haut_abends',   name:'Skincare',        dose:'Evening', kind:'haut',  period:'abends',  accent:'var(--haut)' }
+  ];
+
+  var SPLIT_META = {
+    frei:          { label:'Rest',            short:'–',   colorVar:null },
+    brust:         { label:'Chest',           short:'Che', colorVar:'var(--split-brust)' },
+    ruecken:       { label:'Back',            short:'Bac', colorVar:'var(--split-ruecken)' },
+    arme:          { label:'Arms',            short:'Arm', colorVar:'var(--split-arme)' },
+    brustTrizeps:  { label:'Chest/Triceps',   short:'C/T', colorVar:'var(--split-brust-trizeps)' },
+    rueckenBizeps: { label:'Back/Biceps',     short:'B/B', colorVar:'var(--split-ruecken-bizeps)' },
+    schultern:     { label:'Shoulders',       short:'Sho', colorVar:'var(--split-schultern)' }
+  };
+  var SPLIT_CYCLE = ['frei','brust','ruecken','arme','brustTrizeps','rueckenBizeps','schultern'];
+
+  var WEEKDAYS = [
+    { key:'mo', label:'MO' }, { key:'di', label:'DI' }, { key:'mi', label:'MI' },
+    { key:'do', label:'DO' }, { key:'fr', label:'FR' }, { key:'sa', label:'SA' }, { key:'so', label:'SO' }
+  ];
+
+  function weekdayKeyFromDate(d){
+    var map = ['so','mo','di','mi','do','fr','sa'];
+    return map[d.getDay()];
+  }
+
+  function addDays(d, n){
+    var r = new Date(d);
+    r.setDate(r.getDate()+n);
+    return r;
+  }
+
+  function startOfWeek(d){
+    var day = d.getDay();
+    var diff = (day === 0 ? -6 : 1) - day;
+    return addDays(d, diff);
+  }
+
+  function sameDate(a, b){
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+
+  function buildMonthGrid(year, monthIdx){
+    var first = new Date(year, monthIdx, 1);
+    var gridStart = startOfWeek(first);
+    var cells = [];
+    for(var i=0;i<42;i++){ cells.push(addDays(gridStart, i)); }
+    while(cells.length > 35 && cells[cells.length-7].getMonth() !== monthIdx){
+      cells = cells.slice(0, cells.length-7);
+    }
+    return cells;
+  }
+
+  var MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtShort(d){ return d.getDate()+' '+MONTH_ABBR[d.getMonth()]; }
+
+  function getCss(varName){
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  }
+
+  var resolvedAccent = {
+    'var(--creatine)':  getCss('--creatine'),
+    'var(--curcumin)':  getCss('--curcumin'),
+    'var(--magnesium)': getCss('--magnesium'),
+    'var(--zink)':      getCss('--zink'),
+    'var(--allinone)':  getCss('--allinone'),
+    'var(--fussball)':  getCss('--fussball'),
+    'var(--gym)':       getCss('--gym'),
+    'var(--stadion)':   getCss('--stadion'),
+    'var(--split-brust)':   getCss('--split-brust'),
+    'var(--split-ruecken)': getCss('--split-ruecken'),
+    'var(--split-arme)':    getCss('--split-arme'),
+    'var(--split-brust-trizeps)':   getCss('--split-brust-trizeps'),
+    'var(--split-ruecken-bizeps)':  getCss('--split-ruecken-bizeps'),
+    'var(--split-schultern)':       getCss('--split-schultern'),
+    'var(--split-bauch)':           getCss('--split-bauch'),
+    'var(--gebet)': getCss('--gebet'),
+    'var(--haut)':  getCss('--haut'),
+    'var(--sun)':   getCss('--sun'),
+    'var(--moon)':  getCss('--moon')
+  };
+
+  function hexToRgb(hex){
+    hex = hex.replace('#','');
+    if(hex.length===3){ hex = hex.split('').map(function(c){return c+c;}).join(''); }
+    var n = parseInt(hex,16);
+    return [(n>>16)&255,(n>>8)&255,n&255].join(',');
+  }
+
+  var svgIdCounter = 0;
+
+  function pillIconSVG(accentHex, count){
+    count = count || 1;
+    var pills = '';
+    var w = count>=4 ? 15 : (count===2 ? 24 : 30);
+    var h = w*0.52;
+    for(var i=0;i<count;i++){
+      svgIdCounter++;
+      var gid = 'sh'+svgIdCounter;
+      pills += '<svg viewBox="0 0 34 18" width="'+w+'" height="'+h+'" style="display:block">'
+        + '<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1">'
+        + '<stop offset="0" stop-color="#ffffff" stop-opacity="0.5"/>'
+        + '<stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs>'
+        + '<rect x="1" y="1" width="32" height="16" rx="8" fill="#f4f1ea" stroke="rgba(0,0,0,0.28)" stroke-width="1"/>'
+        + '<path d="M17 1 H26 A8 8 0 0 1 26 17 H17 Z" fill="'+accentHex+'" stroke="rgba(0,0,0,0.28)" stroke-width="1"/>'
+        + '<rect x="1" y="1" width="32" height="16" rx="8" fill="url(#'+gid+')"/>'
+        + '</svg>';
+    }
+    return '<div style="display:flex;gap:2px;flex-wrap:wrap;align-items:center;justify-content:center;width:100%">'+pills+'</div>';
+  }
+
+  function powderIconSVG(){
+    return '<svg viewBox="0 0 34 20" width="40" height="24">'
+      + '<path d="M2 18 Q6 5 17 5 Q28 5 32 18 Z" fill="#ede6d6" stroke="rgba(0,0,0,0.22)" stroke-width="1"/>'
+      + '<circle cx="9" cy="15" r="1" fill="#b8ac97"/>'
+      + '<circle cx="13" cy="11.5" r="1.1" fill="#b8ac97"/>'
+      + '<circle cx="17.5" cy="9.5" r="1" fill="#b8ac97"/>'
+      + '<circle cx="22" cy="12" r="1.2" fill="#b8ac97"/>'
+      + '<circle cx="26" cy="15.5" r="1" fill="#b8ac97"/>'
+      + '<circle cx="17" cy="15" r="1" fill="#b8ac97"/>'
+      + '</svg>';
+  }
+
+  function periodBadgeSVG(period){
+    var sunHex = resolvedAccent['var(--sun)'];
+    var moonHex = resolvedAccent['var(--moon)'];
+    if(period === 'morgens'){
+      return '<circle cx="23" cy="7" r="2.8" fill="'+sunHex+'"/>'
+        + '<g stroke="'+sunHex+'" stroke-width="1" stroke-linecap="round">'
+        + '<line x1="23" y1="1.7" x2="23" y2="3"/>'
+        + '<line x1="23" y1="11" x2="23" y2="12.3"/>'
+        + '<line x1="17.7" y1="7" x2="19" y2="7"/>'
+        + '<line x1="27" y1="7" x2="28.3" y2="7"/>'
+        + '<line x1="19" y1="3" x2="19.9" y2="3.9"/>'
+        + '<line x1="26.1" y1="10.1" x2="27" y2="11"/>'
+        + '<line x1="19" y1="11" x2="19.9" y2="10.1"/>'
+        + '<line x1="26.1" y1="3.9" x2="27" y2="3"/>'
+        + '</g>';
+    }
+    return '<path d="M25 3.3 A3.7 3.7 0 1 0 25 10.7 A2.8 2.8 0 0 1 25 3.3 Z" fill="'+moonHex+'"/>';
+  }
+
+  function prayerIconSVG(accentHex, period){
+    return '<svg viewBox="0 0 30 30" width="27" height="27">'
+      + '<line x1="15" y1="4.5" x2="15" y2="24.5" stroke="'+accentHex+'" stroke-width="1.2"/>'
+      + '<path d="M15 5 C12 6.2 10.4 9.6 10.8 14 C11.1 17.8 12.4 21.5 15 23.8" fill="none" stroke="'+accentHex+'" stroke-width="1.7" stroke-linecap="round"/>'
+      + '<path d="M15 5 C18 6.2 19.6 9.6 19.2 14 C18.9 17.8 17.6 21.5 15 23.8" fill="none" stroke="'+accentHex+'" stroke-width="1.7" stroke-linecap="round"/>'
+      + '<g stroke="'+accentHex+'" stroke-width="1" stroke-linecap="round" opacity="0.85">'
+      + '<line x1="11.6" y1="9" x2="12.4" y2="7.6"/>'
+      + '<line x1="11.3" y1="13" x2="12.2" y2="11.9"/>'
+      + '<line x1="11.7" y1="17" x2="12.6" y2="16.1"/>'
+      + '<line x1="18.4" y1="9" x2="17.6" y2="7.6"/>'
+      + '<line x1="18.7" y1="13" x2="17.8" y2="11.9"/>'
+      + '<line x1="18.3" y1="17" x2="17.4" y2="16.1"/>'
+      + '</g>'
+      + periodBadgeSVG(period)
+      + '</svg>';
+  }
+
+  function skincareIconSVG(accentHex, period){
+    return '<svg viewBox="0 0 30 30" width="24" height="27">'
+      + '<path d="M15 4 C15 4 8.5 13.5 8.5 19 C8.5 23.4 11.4 26.5 15 26.5 C18.6 26.5 21.5 23.4 21.5 19 C21.5 13.5 15 4 15 4 Z" fill="rgba(255,255,255,0.06)" stroke="'+accentHex+'" stroke-width="1.6" stroke-linejoin="round"/>'
+      + '<path d="M11.8 18.5 C11.8 21.2 13.2 22.9 15 22.9" fill="none" stroke="'+accentHex+'" stroke-width="1.1" stroke-linecap="round" opacity="0.65"/>'
+      + periodBadgeSVG(period)
+      + '</svg>';
+  }
+
+  function waterGlassIconSVG(accentHex, period){
+    return '<svg viewBox="0 0 30 30" width="23" height="27">'
+      + '<path d="M10.5 6 L19.5 6 L18 25 C17.9 26.1 17 27 15.9 27 L14.1 27 C13 27 12.1 26.1 12 25 Z" fill="none" stroke="'+accentHex+'" stroke-width="1.6" stroke-linejoin="round"/>'
+      + '<path d="M11.6 15.5 C13.4 16.6 16.6 16.6 18.4 15.5 L17.6 24.3 C17.5 25.1 16.8 25.7 16 25.7 L14 25.7 C13.2 25.7 12.5 25.1 12.4 24.3 Z" fill="'+accentHex+'" opacity="0.35"/>'
+      + '<path d="M11.6 15.5 C13.4 16.6 16.6 16.6 18.4 15.5" fill="none" stroke="'+accentHex+'" stroke-width="1" opacity="0.75"/>'
+      + periodBadgeSVG(period)
+      + '</svg>';
+  }
+
+  function toothbrushIconSVG(accentHex, period){
+    return '<svg viewBox="0 0 30 30" width="27" height="27">'
+      + '<g transform="rotate(-38 15 15)">'
+      + '<rect x="13" y="10" width="4" height="15" rx="2" fill="none" stroke="'+accentHex+'" stroke-width="1.5"/>'
+      + '<rect x="12" y="4.5" width="6" height="6" rx="1.6" fill="'+accentHex+'"/>'
+      + '<line x1="12.2" y1="5" x2="12.2" y2="9.5" stroke="'+accentHex+'" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>'
+      + '<line x1="14" y1="4.3" x2="14" y2="9.2" stroke="'+accentHex+'" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>'
+      + '<line x1="16" y1="4.3" x2="16" y2="9.2" stroke="'+accentHex+'" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>'
+      + '<line x1="17.8" y1="5" x2="17.8" y2="9.5" stroke="'+accentHex+'" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>'
+      + '</g>'
+      + periodBadgeSVG(period)
+      + '</svg>';
+  }
+
+  function checkSVG(){
+    return '<svg viewBox="0 0 16 16"><path d="M2 8.5 L6 12.5 L14 3.5" fill="none" stroke="#12151b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  // ---------- storage helpers (browser localStorage) ----------
+  // Runs fully standalone in the phone's own browser - no Claude account,
+  // plan, or "Publish" step needed. Data stays on this device only.
+  var STORAGE_PREFIX = 'protocol_';
+
+  async function storeGet(key){
+    try{
+      var raw = localStorage.getItem(STORAGE_PREFIX + key);
+      return raw !== null ? { value: raw } : null;
+    }catch(e){
+      return null;
+    }
+  }
+  async function storeSet(key, value){
+    try{
+      localStorage.setItem(STORAGE_PREFIX + key, value);
+    }catch(e){ /* storage disabled or full - silent */ }
+  }
+
+  function pad(n){ return n<10 ? '0'+n : ''+n; }
+  function dateKey(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function toInputDate(d){ return dateKey(d); }
+
+  function defaultDay(){
+    return {
+      supplements:{ kreatin:false, curcumin:false, magnesium:false, zink:false, allinone:false },
+      ritual:{ gebet_morgens:false, gebet_abends:false, water_morgens:false, water_abends:false, teeth_morgens:false, teeth_abends:false, haut_morgens:false, haut_abends:false }
+    };
+  }
+
+  var state = {
+    date: new Date(),
+    day: defaultDay(),
+    activePage: 'supplements',
+    gymPlan: {},
+    bauchPlan: {},
+    fussballPlan: {},
+    stadionPlan: {}
+  };
+
+  async function loadDay(d){
+    var key = 'day:'+dateKey(d);
+    var res = await storeGet(key);
+    var fresh = defaultDay();
+    if(res && res.value){
+      try{
+        var parsed = typeof res.value === 'string' ? JSON.parse(res.value) : res.value;
+        fresh.supplements = Object.assign(fresh.supplements, parsed.supplements||{});
+        fresh.ritual = Object.assign(fresh.ritual, parsed.ritual||{});
+      }catch(e){ /* keep fresh defaults */ }
+    }
+    state.day = fresh;
+  }
+
+  async function saveDay(){
+    var key = 'day:'+dateKey(state.date);
+    await storeSet(key, JSON.stringify(state.day));
+  }
+
+  async function fetchDayRaw(d){
+    var res = await storeGet('day:'+dateKey(d));
+    var fresh = defaultDay();
+    if(res && res.value){
+      try{
+        var parsed = typeof res.value === 'string' ? JSON.parse(res.value) : res.value;
+        fresh.supplements = Object.assign(fresh.supplements, parsed.supplements||{});
+        fresh.ritual = Object.assign(fresh.ritual, parsed.ritual||{});
+      }catch(e){ /* keep fresh defaults */ }
+    }
+    return fresh;
+  }
+
+  function isSupplementsComplete(data){
+    return SUPPLEMENTS.every(function(cfg){ return !!data.supplements[cfg.id]; });
+  }
+  function isRitualComplete(data){
+    return ROUTINE.every(function(cfg){ return !!data.ritual[cfg.id]; });
+  }
+
+  async function computeStreak(isCompleteFn){
+    var d = new Date(); d.setHours(0,0,0,0);
+    var todayData = await fetchDayRaw(d);
+    if(!isCompleteFn(todayData)){ d = addDays(d, -1); }
+
+    var streak = 0;
+    for(var i=0; i<365; i++){
+      var data = await fetchDayRaw(d);
+      if(isCompleteFn(data)){
+        streak++;
+        d = addDays(d, -1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  async function computeWeekDots(isCompleteFn){
+    var monday = startOfWeek(new Date());
+    var today = new Date(); today.setHours(0,0,0,0);
+    var results = [];
+    for(var i=0;i<7;i++){
+      var d = addDays(monday, i);
+      var data = await fetchDayRaw(d);
+      results.push({ date:d, complete: isCompleteFn(data), isToday: sameDate(d, today) });
+    }
+    return results;
+  }
+
+  async function renderStreakCard(kind){
+    var isCompleteFn = kind === 'supp' ? isSupplementsComplete : isRitualComplete;
+    var countEl = document.getElementById(kind === 'supp' ? 'suppStreakCount' : 'ritualStreakCount');
+    var weekEl = document.getElementById(kind === 'supp' ? 'suppStreakWeek' : 'ritualStreakWeek');
+
+    var streak = await computeStreak(isCompleteFn);
+    countEl.textContent = streak;
+
+    var dots = await computeWeekDots(isCompleteFn);
+    weekEl.innerHTML = '';
+    dots.forEach(function(entry){
+      var wkKey = weekdayKeyFromDate(entry.date);
+      var wkLabel = WEEKDAYS.filter(function(w){ return w.key === wkKey; })[0].label.charAt(0);
+      var dot = document.createElement('div');
+      dot.className = 'streak-dot' + (entry.complete ? ' done' : '') + (entry.isToday ? ' today-marker' : '');
+      if(entry.complete){
+        var hex = resolvedAccent[kind === 'supp' ? 'var(--allinone)' : 'var(--gebet)'];
+        dot.style.background = hex;
+        dot.style.borderColor = hex;
+        dot.style.color = '#12151b';
+      }
+      dot.textContent = wkLabel;
+      weekEl.appendChild(dot);
+    });
+  }
+
+  function makePlanStore(storageKey){
+    return {
+      load: async function(){
+        var res = await storeGet(storageKey);
+        var plan = {};
+        if(res && res.value){
+          try{
+            var parsed = typeof res.value === 'string' ? JSON.parse(res.value) : res.value;
+            Object.keys(parsed).forEach(function(k){ if(parsed[k]) plan[k] = parsed[k]; });
+          }catch(e){ /* keep empty */ }
+        }
+        return plan;
+      },
+      save: async function(plan){ await storeSet(storageKey, JSON.stringify(plan)); }
+    };
+  }
+
+  var gymPlanStore = makePlanStore('gym-plan');
+  var bauchPlanStore = makePlanStore('bauch-plan');
+  var fussballPlanStore = makePlanStore('fussball-plan');
+  var stadionPlanStore = makePlanStore('stadion-plan');
+
+  async function loadGymPlan(){
+    var plan = await gymPlanStore.load();
+    var clean = {};
+    Object.keys(plan).forEach(function(k){ if(SPLIT_META[plan[k]]){ clean[k] = plan[k]; } });
+    state.gymPlan = clean;
+  }
+  async function saveGymPlan(){ await gymPlanStore.save(state.gymPlan); }
+  function getGymSplitForDate(d){ return state.gymPlan[dateKey(d)] || 'frei'; }
+  function setGymSplitForDate(d, splitKey){
+    var key = dateKey(d);
+    if(splitKey === 'frei'){ delete state.gymPlan[key]; } else { state.gymPlan[key] = splitKey; }
+    saveGymPlan();
+  }
+
+  async function loadBauchPlan(){ state.bauchPlan = await bauchPlanStore.load(); }
+  async function saveBauchPlan(){ await bauchPlanStore.save(state.bauchPlan); }
+  function getBauchForDate(d){ return !!state.bauchPlan[dateKey(d)]; }
+  function setBauchForDate(d, on){
+    var key = dateKey(d);
+    if(on){ state.bauchPlan[key] = true; } else { delete state.bauchPlan[key]; }
+    saveBauchPlan();
+  }
+
+  async function loadFussballPlan(){ state.fussballPlan = await fussballPlanStore.load(); }
+  async function saveFussballPlan(){ await fussballPlanStore.save(state.fussballPlan); }
+  function getFussballForDate(d){ return !!state.fussballPlan[dateKey(d)]; }
+  function setFussballForDate(d, on){
+    var key = dateKey(d);
+    if(on){ state.fussballPlan[key] = true; } else { delete state.fussballPlan[key]; }
+    saveFussballPlan();
+  }
+
+  async function loadStadionPlan(){ state.stadionPlan = await stadionPlanStore.load(); }
+  async function saveStadionPlan(){ await stadionPlanStore.save(state.stadionPlan); }
+  function getStadionForDate(d){ return !!state.stadionPlan[dateKey(d)]; }
+  function setStadionForDate(d, on){
+    var key = dateKey(d);
+    if(on){ state.stadionPlan[key] = true; } else { delete state.stadionPlan[key]; }
+    saveStadionPlan();
+  }
+
+  var EXTRA_TOGGLES = [
+    { id:'bauch',    label:'Abs',         colorVar:'var(--split-bauch)', get:getBauchForDate,    set:setBauchForDate },
+    { id:'fussball', label:'⚽ Football', colorVar:'var(--fussball)',    get:getFussballForDate, set:setFussballForDate },
+    { id:'stadion',  label:'🏟️ Match',    colorVar:'var(--stadion)',     get:getStadionForDate,  set:setStadionForDate }
+  ];
+
+  // ---------- Sports month view + picker ----------
+  var monthAnchor = new Date();
+  var selectedGymDate = null;
+
+  function hideGymSplitPicker(){
+    selectedGymDate = null;
+    var picker = document.getElementById('gymSplitPicker');
+    if(picker){ picker.classList.remove('visible'); }
+  }
+
+  function positionGymSplitPicker(d){
+    var wrap = document.getElementById('gymMonthWrap');
+    var picker = document.getElementById('gymSplitPicker');
+    var cellEl = wrap.querySelector('.month-cell[data-date="'+dateKey(d)+'"]');
+    if(!cellEl) return;
+
+    var cellRect = cellEl.getBoundingClientRect();
+    var wrapRect = wrap.getBoundingClientRect();
+    var pickerHeight = picker.offsetHeight;
+    var pickerWidth = picker.offsetWidth;
+
+    var spaceBelowInViewport = window.innerHeight - cellRect.bottom;
+    var spaceAboveWithinWrap = cellRect.top - wrapRect.top;
+    var top;
+
+    if(spaceBelowInViewport < pickerHeight + 12 && spaceAboveWithinWrap > pickerHeight){
+      top = cellEl.offsetTop - pickerHeight - 6;
+    } else {
+      top = cellEl.offsetTop + cellEl.offsetHeight + 6;
+    }
+    if(top < 0) top = 0;
+
+    var left = cellEl.offsetLeft;
+    var maxLeft = wrap.clientWidth - pickerWidth;
+    if(maxLeft < 0) maxLeft = 0;
+    if(left > maxLeft) left = maxLeft;
+    if(left < 0) left = 0;
+
+    picker.style.top = top + 'px';
+    picker.style.left = left + 'px';
+  }
+
+  function showGymSplitPicker(d){
+    selectedGymDate = d;
+    var picker = document.getElementById('gymSplitPicker');
+    var label = document.getElementById('gymSplitPickerLabel');
+    var chipsWrap = document.getElementById('gymSplitPickerChips');
+    var current = getGymSplitForDate(d);
+
+    label.textContent = 'Select for '+fmtShort(d);
+    chipsWrap.innerHTML = '';
+
+    SPLIT_CYCLE.forEach(function(key){
+      var meta = SPLIT_META[key];
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'split-chip' + (key === current ? ' active' : '');
+      chip.textContent = meta.label;
+
+      if(key !== 'frei'){
+        var hex = resolvedAccent[meta.colorVar];
+        if(key === current){
+          chip.style.borderColor = hex;
+          chip.style.color = hex;
+          chip.style.background = 'rgba('+hexToRgb(hex)+',0.18)';
+        }
+      } else if(key === current){
+        chip.style.borderColor = 'var(--text-dim)';
+        chip.style.color = 'var(--text)';
+      }
+
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        setGymSplitForDate(d, key);
+        renderMonthOverview();
+        showGymSplitPicker(d);
+        if(sameDate(d, state.date)){ renderDaySummary(); }
+      });
+
+      chipsWrap.appendChild(chip);
+    });
+
+    var divider = document.createElement('div');
+    divider.className = 'split-picker-divider';
+    chipsWrap.appendChild(divider);
+
+    EXTRA_TOGGLES.forEach(function(tg){
+      var on = tg.get(d);
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'split-chip split-chip-toggle' + (on ? ' active' : '');
+      chip.textContent = tg.label;
+      if(on){
+        var hex = resolvedAccent[tg.colorVar];
+        chip.style.borderColor = hex;
+        chip.style.color = hex;
+        chip.style.background = 'rgba('+hexToRgb(hex)+',0.18)';
+      }
+      chip.addEventListener('click', function(e){
+        e.stopPropagation();
+        tg.set(d, !on);
+        renderMonthOverview();
+        showGymSplitPicker(d);
+        if(sameDate(d, state.date)){ renderDaySummary(); }
+      });
+      chipsWrap.appendChild(chip);
+    });
+
+    picker.classList.add('visible');
+    positionGymSplitPicker(d);
+  }
+
+  var monthNameFmt = new Intl.DateTimeFormat('en-US', { month:'long', year:'numeric' });
+
+  function renderMonthOverview(){
+    document.getElementById('gymMonthLabel').textContent = monthNameFmt.format(monthAnchor);
+    var grid = document.getElementById('gymMonthGrid');
+    grid.innerHTML = '';
+
+    ['MO','DI','MI','DO','FR','SA','SO'].forEach(function(lbl){
+      var h = document.createElement('div');
+      h.className = 'month-cell-head';
+      h.textContent = lbl;
+      grid.appendChild(h);
+    });
+
+    var year = monthAnchor.getFullYear(), month = monthAnchor.getMonth();
+    var cells = buildMonthGrid(year, month);
+    var today = new Date(); today.setHours(0,0,0,0);
+
+    cells.forEach(function(d){
+      var outside = d.getMonth() !== month;
+      var isSelected = selectedGymDate && sameDate(d, selectedGymDate);
+      var isCurrent = !outside && sameDate(d, state.date);
+      var cellEl = document.createElement('div');
+      cellEl.className = 'month-cell' + (outside ? ' outside' : '') + (!outside && sameDate(d, today) ? ' today' : '') + (isCurrent ? ' current' : '') + (isSelected ? ' selected' : '');
+      if(!outside){ cellEl.dataset.date = dateKey(d); }
+
+      var bottomHtml = '';
+      if(!outside){
+        var splitKey = getGymSplitForDate(d);
+        var splitMeta = SPLIT_META[splitKey];
+        var labelColor = splitKey === 'frei' ? 'var(--text-dimmer)' : resolvedAccent[splitMeta.colorVar];
+        bottomHtml += '<div class="month-split-label" style="color:'+labelColor+'">'+splitMeta.short+'</div>';
+
+        var indicators = '';
+        if(getBauchForDate(d)){ indicators += '<span class="month-dot" style="background:'+resolvedAccent['var(--split-bauch)']+'"></span>'; }
+        if(getFussballForDate(d)){ indicators += '<span class="month-emoji">⚽</span>'; }
+        if(getStadionForDate(d)){ indicators += '<span class="month-emoji">🏟️</span>'; }
+        if(indicators){ bottomHtml += '<div class="month-cell-dots">'+indicators+'</div>'; }
+      }
+
+      cellEl.innerHTML = '<div class="month-cell-num">'+d.getDate()+'</div>' + bottomHtml;
+
+      if(!outside){
+        (function(dCopy){
+          cellEl.addEventListener('click', function(e){
+            e.stopPropagation();
+            if(selectedGymDate && sameDate(selectedGymDate, dCopy)){
+              hideGymSplitPicker();
+              renderMonthOverview();
+            } else {
+              selectedGymDate = dCopy;
+              renderMonthOverview();
+              showGymSplitPicker(dCopy);
+            }
+          });
+        })(d);
+      }
+
+      grid.appendChild(cellEl);
+    });
+  }
+
+  function initMonthNav(){
+    document.querySelectorAll('.month-nav-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var dir = parseInt(btn.dataset.dir, 10);
+        monthAnchor = new Date(monthAnchor.getFullYear(), monthAnchor.getMonth()+dir, 1);
+        hideGymSplitPicker();
+        renderMonthOverview();
+      });
+    });
+
+    document.addEventListener('click', function(e){
+      var wrap = document.getElementById('gymMonthWrap');
+      var picker = document.getElementById('gymSplitPicker');
+      if(!wrap || !picker || !picker.classList.contains('visible')) return;
+      if(!wrap.contains(e.target)){
+        hideGymSplitPicker();
+      }
+    });
+  }
+
+  // ---------- rendering ----------
+  var weekdayFmt = new Intl.DateTimeFormat('en-US', { weekday:'long', day:'2-digit', month:'long' });
+
+  function renderDateBar(){
+    document.getElementById('dateMain').textContent = weekdayFmt.format(state.date);
+  }
+
+  function renderDaySummary(){
+    var el = document.getElementById('daySummary');
+    var d = state.date;
+    var parts = [];
+
+    var splitKey = getGymSplitForDate(d);
+    if(splitKey !== 'frei'){
+      var meta = SPLIT_META[splitKey];
+      parts.push('<span style="color:'+resolvedAccent[meta.colorVar]+'">'+meta.label+'</span>');
+    }
+    if(getBauchForDate(d)){
+      parts.push('<span style="color:'+resolvedAccent['var(--split-bauch)']+'">Abs</span>');
+    }
+    if(getFussballForDate(d)){
+      parts.push('<span style="color:'+resolvedAccent['var(--fussball)']+'">⚽ Football</span>');
+    }
+    if(getStadionForDate(d)){
+      parts.push('<span style="color:'+resolvedAccent['var(--stadion)']+'">🏟️ Match</span>');
+    }
+
+    el.innerHTML = parts.length ? parts.join('<span class="sep">·</span>') : 'Nothing planned';
+  }
+
+  function renderSupplements(){
+    var list = document.getElementById('suppList');
+    list.innerHTML = '';
+    var takenCount = 0;
+
+    SUPPLEMENTS.forEach(function(cfg){
+      var accentHex = resolvedAccent[cfg.accent] || '#ffffff';
+      var taken = !!state.day.supplements[cfg.id];
+      if(taken) takenCount++;
+
+      var card = document.createElement('div');
+      card.className = 'supp-card' + (taken ? ' taken' : '');
+      card.style.setProperty('--accent', accentHex);
+      card.style.setProperty('--accent-rgb', hexToRgb(accentHex));
+
+      var iconHtml = cfg.type === 'powder' ? powderIconSVG() : pillIconSVG(accentHex, cfg.count);
+
+      var dustHtml = cfg.id === 'kreatin'
+        ? '<div class="dust-wrap"><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span><span class="dust"></span></div>'
+        : '';
+
+      card.innerHTML =
+        dustHtml +
+        '<div class="supp-icon-wrap">'+iconHtml+'</div>' +
+        '<div class="supp-info">' +
+          '<div class="supp-name">'+cfg.name+'</div>' +
+          '<div class="supp-dose">'+cfg.dose+'</div>' +
+        '</div>' +
+        '<div class="check-badge">'+checkSVG()+'</div>';
+
+      card.addEventListener('click', function(){ toggleSupplement(cfg.id, card); });
+      list.appendChild(card);
+    });
+
+    document.getElementById('suppProgress').textContent = takenCount+'/'+SUPPLEMENTS.length;
+  }
+
+  function toggleSupplement(id, cardEl){
+    var newVal = !state.day.supplements[id];
+    state.day.supplements[id] = newVal;
+    saveDay();
+
+    if(newVal){
+      cardEl.classList.add('taken','just-taken');
+      setTimeout(function(){ cardEl.classList.remove('just-taken'); }, 900);
+    } else {
+      cardEl.classList.remove('taken','just-taken');
+    }
+    updateSuppProgressOnly();
+    renderStreakCard('supp');
+  }
+
+  function updateSuppProgressOnly(){
+    var count = 0;
+    SUPPLEMENTS.forEach(function(cfg){ if(state.day.supplements[cfg.id]) count++; });
+    document.getElementById('suppProgress').textContent = count+'/'+SUPPLEMENTS.length;
+  }
+
+  function renderRitual(){
+    var morgensList = document.getElementById('ritualMorgens');
+    var abendsList = document.getElementById('ritualAbends');
+    morgensList.innerHTML = '';
+    abendsList.innerHTML = '';
+    var doneCount = 0;
+
+    ROUTINE.forEach(function(cfg){
+      var accentHex = resolvedAccent[cfg.accent] || '#ffffff';
+      var done = !!state.day.ritual[cfg.id];
+      if(done) doneCount++;
+
+      var card = document.createElement('div');
+      card.className = 'supp-card ritual-card' + (done ? ' taken' : '');
+      card.style.setProperty('--accent', accentHex);
+      card.style.setProperty('--accent-rgb', hexToRgb(accentHex));
+
+      var iconHtml = cfg.kind === 'gebet' ? prayerIconSVG(accentHex, cfg.period)
+        : cfg.kind === 'water' ? waterGlassIconSVG(accentHex, cfg.period)
+        : cfg.kind === 'teeth' ? toothbrushIconSVG(accentHex, cfg.period)
+        : skincareIconSVG(accentHex, cfg.period);
+
+      card.innerHTML =
+        '<div class="supp-icon-wrap">'+iconHtml+'</div>' +
+        '<div class="supp-info">' +
+          '<div class="supp-name">'+cfg.name+'</div>' +
+          '<div class="supp-dose">'+cfg.dose+'</div>' +
+        '</div>' +
+        '<div class="check-badge">'+checkSVG()+'</div>';
+
+      card.addEventListener('click', function(){ toggleRitual(cfg.id, card); });
+      (cfg.period === 'morgens' ? morgensList : abendsList).appendChild(card);
+    });
+
+    document.getElementById('ritualProgress').textContent = doneCount+'/'+ROUTINE.length;
+    document.getElementById('ritualComplete').style.display = (doneCount === ROUTINE.length) ? 'block' : 'none';
+  }
+
+  function toggleRitual(id, cardEl){
+    var newVal = !state.day.ritual[id];
+    state.day.ritual[id] = newVal;
+    saveDay();
+
+    if(newVal){
+      cardEl.classList.add('taken','just-taken');
+      setTimeout(function(){ cardEl.classList.remove('just-taken'); }, 900);
+    } else {
+      cardEl.classList.remove('taken','just-taken');
+    }
+    updateRitualProgressOnly();
+    renderStreakCard('ritual');
+  }
+
+  function updateRitualProgressOnly(){
+    var count = 0;
+    ROUTINE.forEach(function(cfg){ if(state.day.ritual[cfg.id]) count++; });
+    document.getElementById('ritualProgress').textContent = count+'/'+ROUTINE.length;
+    document.getElementById('ritualComplete').style.display = (count === ROUTINE.length) ? 'block' : 'none';
+  }
+
+  async function goToDate(d){
+    state.date = d;
+    await loadDay(d);
+    renderDateBar();
+    renderDaySummary();
+    renderSupplements();
+    renderRitual();
+
+    if(d.getFullYear() !== monthAnchor.getFullYear() || d.getMonth() !== monthAnchor.getMonth()){
+      monthAnchor = new Date(d.getFullYear(), d.getMonth(), 1);
+    }
+    hideGymSplitPicker();
+    renderMonthOverview();
+  }
+
+  function setActivePage(name){
+    state.activePage = name;
+    document.querySelectorAll('.page').forEach(function(p){
+      p.classList.toggle('active', p.id === 'page-'+name);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.page === name);
+    });
+    storeSet('active-tab', name);
+  }
+
+  function initNav(){
+    document.querySelectorAll('.nav-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ setActivePage(btn.dataset.page); });
+    });
+  }
+
+  document.getElementById('prevDay').addEventListener('click', function(){
+    var d = new Date(state.date);
+    d.setDate(d.getDate()-1);
+    goToDate(d);
+  });
+  document.getElementById('nextDay').addEventListener('click', function(){
+    var d = new Date(state.date);
+    d.setDate(d.getDate()+1);
+    goToDate(d);
+  });
+  document.getElementById('gotoToday').addEventListener('click', function(){
+    goToDate(new Date());
+  });
+
+  async function init(){
+    initNav();
+    initMonthNav();
+    await loadDay(state.date);
+    await loadGymPlan();
+    await loadBauchPlan();
+    await loadFussballPlan();
+    await loadStadionPlan();
+    renderDateBar();
+    renderDaySummary();
+    renderSupplements();
+    renderRitual();
+    renderMonthOverview();
+    renderStreakCard('supp');
+    renderStreakCard('ritual');
+
+    var savedTab = await storeGet('active-tab');
+    var startPage = (savedTab && savedTab.value) ? savedTab.value : 'supplements';
+    setActivePage(startPage);
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
